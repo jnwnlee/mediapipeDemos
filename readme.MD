@@ -32,6 +32,7 @@ python objectron.py
 python pose.py
 python selfie_segmentation.py
 ```
++ face_filter.py , filter_gradio.py, head_posture added/modified by [jnwnlee](https://github.com/jnwnlee).
 
 `pose.py` and `iris.py` include the possibility to process a video file instead of the webcam input stream. Run like this:
 
