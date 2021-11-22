@@ -83,7 +83,10 @@ def plotting(points, eyes, lips, eye, lip):
     exit()
 
 def main():
-    source = WebcamSource(width=frame_width, height=frame_height)
+    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, frame_width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, frame_height)
+    # source = WebcamSource(width=frame_width, height=frame_height)
 
     pcf = PCF(
         near=1,
@@ -101,7 +104,10 @@ def main():
 
         distances = []
 
-        for idx, (frame, frame_rgb) in enumerate(source):
+        # for idx, (frame, frame_rgb) in enumerate(source):
+        while cap.isOpened():
+            ret, frame = cap.read()
+            assert ret, 'result not successfully returned.'
             results = face_mesh.process(frame)
             multi_face_landmarks = results.multi_face_landmarks
 
@@ -244,16 +250,17 @@ def main():
                 GAZE += ' '+str(round(angles[2], 4))
                 cv2.putText(frame, GAZE, (20, 110), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                 
-                plt.scatter(range(len(distances)), distances)
-                plt.title('Distance estimation (relative)')
-                plt.pause(0.01)
+                # plt.scatter(range(len(distances)), distances)
+                # plt.title('Distance estimation (relative)')
+                # plt.pause(0.01)
 
                 if cv2.waitKey(1) == ord('w'):
                     # visualize landmark's scatter plot, W
                     plotting(landmark, eyes_arr, lips_arr, eyes_mean, lips_mean)
             
-            source.show(frame)
-        plt.show()
+            # source.show(frame)
+            cv2.imshow('head posture', frame)
+        # plt.show()
 
 
 if __name__ == "__main__":
